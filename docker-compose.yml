@@ -1,11 +1,39 @@
 version: '3.4'
 
 services:
-  viz:
-    image: local/visualizer-arm:latest
+
+  # influxdb:
+  #   image: influxdb:latest
+  #   container_name: influxdb
+  #   environment:
+  #     INFLUXDB_ADMIN_ENABLED: "true"
+  #   ports:
+  #     - "8083:8083"
+  #     - "8086:8086"
+  #     - "8090:8090"
+
+  # influxdb_setup:
+  #   image: influxdb:latest
+  #   command: influx -host influxdb -execute 'create database iot'
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - "3000:3000"
+
+  mosquitto:
+    image: randombyte/arm-alpine-mosquitto:latest
     deploy:
       replicas: 1
       placement:
          constraints: [node.role == manager]
     ports:
-      - 9099:8080
+      - "1883:1883"
+      - "9001:9001"
+
+  # mqti:
+  #   image: ashmckenzie/mqti
+  #   container_name: mqti
+  #   command: /app/mqti forward --debug
+  #   volumes:
+  #     - ./mqti/config.yaml:/app/config.yaml:ro
